@@ -1,21 +1,35 @@
 
-var inputString = process.argv;
+
 var request = require("request");
-var Keys = require ("./keys.js");
+var keys = require ("./keys.js");
 require("dotenv").config();
 
+//OMDB Request
 
+var movie = inputString.slice(1); //variable that takes all the argv elements but positions 0 and 1.
+var inputString = process.argv.slice(2); //variable that takes all the argv elements but positions 0, 1,2
 
-// var spotify = new Spotify(keys.spotify);
-// var twitter = new Twitter(keys.twitter)
+if (inputString[0] === "movie-this"){
 
-if (inputString[2] === "movie-this"){
-    var movie = inputString[3].trim();
+//if the the array movie has no element the if will excecute.
+if(!movie.length){
+movie= "Mr. Nobody";
+omdbRequest(movie);
+}
+else {
 
-request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&apikey=trilogy", function(error, response, body) {
+    omdbRequest(movie);
+}
 
+}
+
+// function for the OMDB request.
+function omdbRequest(movie){
+
+request("http://www.omdbapi.com/?t="+movie+"&plot=short&apikey=trilogy", function(error, response, body) {
+   
   if (!error && response.statusCode === 200) {
-
+    
     console.log("***************************************************");
     console.log("Title: " + JSON.parse(body).Title);
     console.log("Year: " + JSON.parse(body).Year);
@@ -26,6 +40,9 @@ request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&apikey=trilogy", func
     console.log("Cast: " + JSON.parse(body).Actors);
     console.log("***************************************************");
   }
-});
 
+  
+});
 }
+
+// OMDB Request end.
