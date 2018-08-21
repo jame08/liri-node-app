@@ -1,0 +1,12 @@
+
+//SPOTIFY
+
+SPOTIFY_ID= a35780cbd84244e3a9062959d405d16a
+SPOTIFY_SECRET= d0857ad1c53641b280bb566b073c1a29
+
+//TWITTER
+
+TWITTER_CONSUMER_KEY=your-twitter-consumer-key
+TWITTER_CONSUMER_SECRET=your-twitter-consumer-secret
+TWITTER_ACCESS_TOKEN_KEY=your-access-token-key
+TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret
