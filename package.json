@@ -2,7 +2,7 @@
   "name": "liri-node-app",
   "version": "1.0.0",
   "description": "",
-  "main": "keys.js",
+  "main": ".env.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,8 +18,12 @@
   "homepage": "https://github.com/jame08/liri-node-app#readme",
   "dependencies": {
     "dotenv": "^6.0.0",
-    "log-timestamp": "^0.1.2",
+    "fetch-tweets": "^0.1.7",
+    "install": "^0.12.1",
     "node-spotify-api": "^1.0.7",
-    "request": "^2.88.0"
+    "npm": "^6.4.0",
+    "request": "^2.88.0",
+    "require": "^2.4.20",
+    "twitter": "^1.7.1"
   }
 }

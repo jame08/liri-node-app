@@ -1,15 +1,23 @@
 
 
 require("dotenv").config();
-var keys = require ("./keys.js");
+var keys = require("./keys.js");
 var request = require("request");
 var fs = require('fs');
-var logs = require('log-timestamp');
 var Spotify = require("node-spotify-api");
-var spotify = new Spotify(keys.spotify);
+var Twitter = require('twitter')
+var twitter = new Twitter({
+  consumer_key: '4gdTAMMK5ILA8ndDM0n9KjY6E',
+  consumer_secret: 'x00kvGhWHR7jeF84XTnY0kWrlTqOkNr1AA5KJNmoxbH8geGqM0',
+  access_token_key: '1031503856390340608-TgkMr9uTxEBKFp3zbDEWdVqvJbGLd3',
+  access_token_secret: 'LtfgF7sVYAhz37iP9wUMBmroV4IejvopESUF6y2TPxei7'
+
+});
+var spotify = new Spotify({id: 'a35780cbd84244e3a9062959d405d16a',secret: 'd0857ad1c53641b280bb566b073c1a29'});
+// var spotify = new Spotify({id: keys.spotify.id, secret: keys.spotify.secret});
 
 
-var divider ="\n------------------------------------------------------------\n\n";
+var divider ="\n------------------------------------------------------------\n";
 
 //User Input
 var cliInput = process.argv.slice(2);
@@ -25,14 +33,26 @@ if(!inputString.length){
 
 omdbRequest("Mr. Nobody");
 }
+
 else {
 
 omdbRequest(inputString);
 }
 
 } else if (term === "spotify-this-song"){
+  if(!inputString.length){
 
-spotifyRequest(inputString);
+    spotifyRequest("The sign");
+    }
+    
+    else {
+    
+      spotifyRequest(inputString);
+    }
+
+}else if (term === 'my-tweets'){
+
+fetchTweets(inputString);
 }
 //App Logic ^
 
@@ -55,7 +75,7 @@ request("http://www.omdbapi.com/?t="+movie+"&plot=short&apikey=trilogy", functio
       "Plot: " + JSON.parse(body).Plot,
       "Cast: " + JSON.parse(body).Actors
     ].join("\n\n");
-   saveLogs(showData,'OMDB',movie);
+   saveLogs('OMDB',movie);
     console.log(divider + showData + divider)
   }
 
@@ -74,21 +94,51 @@ function spotifyRequest(userString)
 {
 spotify.search({ type: 'track', query: userString })
 .then(function(response) {
-  console.log(response);
+
+  var songObj = {
+    "URL: " : response.tracks.items[0].external_urls.spotify,
+    "Song name: " : response.tracks.items[0].name,
+    "Artist name: " : response.tracks.items[0].artists[0].name,
+    "Album name: " : response.tracks.items[0].album.name,
+
+}
+  saveLogs('Spotify',userString);
+  console.log(songObj);
 })
 .catch(function(err) {
   console.log(err);
 });
 
 }
-
-
 // Spotify request ^
 
-function saveLogs(showData,apiname,search){
+//Twitter Request.
+
+
+function fetchTweets(username){
+
+  params= {screen_name: username};
+
+  twitter.get('statuses/user_timeline', params, function(error, tweets, response) {
+    if (!error) {
+      console.log("___________________________________________")
+        console.log("                                           ")
+        for (var i = 0; i < tweets.length; i++) {
+            console.log(i + 1 + ". " + tweets[i].text);
+    }
+  }
+  });
+}
+
+// Twitter Request ^
+
+
+//log function.
+
+function saveLogs(apiname,search){
 
   function timestamp() {
-    return 'API Called to ' + apiname + ' was made at ' + '[' + new Date().toISOString() + ']' + ' searching for ' + search;
+    return 'API Called to ' + apiname + ' was made at ' + '[' + new Date().toLocaleString("en-US", {timeZone: "America/New_York"}) + ']' + ' searching for ' + search;
   }
 
   var time = timestamp();
@@ -96,7 +146,6 @@ function saveLogs(showData,apiname,search){
   fs.appendFile("logs.txt", divider + time + divider, function(err) {
     if (err) throw err;
 
-    console.log(showData);
   });
 
 }
