@@ -7,14 +7,14 @@ var fs = require('fs');
 var Spotify = require("node-spotify-api");
 var Twitter = require('twitter')
 var twitter = new Twitter({
-  consumer_key: '4gdTAMMK5ILA8ndDM0n9KjY6E',
-  consumer_secret: 'x00kvGhWHR7jeF84XTnY0kWrlTqOkNr1AA5KJNmoxbH8geGqM0',
-  access_token_key: '1031503856390340608-TgkMr9uTxEBKFp3zbDEWdVqvJbGLd3',
-  access_token_secret: 'LtfgF7sVYAhz37iP9wUMBmroV4IejvopESUF6y2TPxei7'
+  consumer_key: keys.twitter.consumer_key,
+  consumer_secret: keys.twitter.consumer_secret,
+  access_token_key: keys.twitter.access_token_key,
+  access_token_secret: keys.twitter.access_token_secret
 
 });
-var spotify = new Spotify({id: 'a35780cbd84244e3a9062959d405d16a',secret: 'd0857ad1c53641b280bb566b073c1a29'});
-// var spotify = new Spotify({id: keys.spotify.id, secret: keys.spotify.secret});
+
+var spotify = new Spotify({id: keys.spotify.id, secret: keys.spotify.secret});
 
 
 var divider ="\n------------------------------------------------------------\n";
@@ -95,15 +95,15 @@ function spotifyRequest(userString)
 spotify.search({ type: 'track', query: userString })
 .then(function(response) {
 
-  var songObj = {
-    "URL: " : response.tracks.items[0].external_urls.spotify,
-    "Song name: " : response.tracks.items[0].name,
-    "Artist name: " : response.tracks.items[0].artists[0].name,
-    "Album name: " : response.tracks.items[0].album.name,
+  var showData = [
+    "URL: " + response.tracks.items[0].external_urls.spotify,
+    "Song name: " + response.tracks.items[0].name,
+    "Artist name: " + response.tracks.items[0].artists[0].name,
+    "Album name: " + response.tracks.items[0].album.name
 
-}
+  ];
   saveLogs('Spotify',userString);
-  console.log(songObj);
+  console.log(  showData );
 })
 .catch(function(err) {
   console.log(err);
